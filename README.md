@@ -3,6 +3,18 @@ Easily deploy an MLflow tracking server with 1 command.
 
 MinIO S3 is used as the artifact store and MySQL server is used as the backend store.
 
+## Development notes
+
+### Listening ports - `103xx`
+
+Services will listening on `103xx` ports
+
+| Services            | Ports       |
+| ------------------- | ----------- |
+| web(mlflow_service) | 10380       |
+| database(MySQL)     | 10336       |
+| Minio(S3/OSS)       | 10390,10391 |
+
 ## How to run
 
 1. Clone (download) this repository
@@ -19,9 +31,9 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
     docker-compose up -d --build
     ```
 
-4. Access MLflow UI with http://localhost:5000
+4. Access MLflow UI with http://localhost:10380
 
-5. Access MinIO UI with http://localhost:9000
+5. Access MinIO UI with http://localhost:10390
 
 ## Containerization
 
@@ -44,8 +56,8 @@ The MLflow tracking server is composed of 4 docker containers:
 3. Set environmental variables
 
     ```bash
-    export MLFLOW_TRACKING_URI=http://localhost:5000
-    export MLFLOW_S3_ENDPOINT_URL=http://localhost:9000
+    export MLFLOW_TRACKING_URI=http://localhost:10380
+    export MLFLOW_S3_ENDPOINT_URL=http://localhost:10390
     ```
 4. Set MinIO credentials
 
@@ -79,5 +91,8 @@ The MLflow tracking server is composed of 4 docker containers:
 
  7. You can check the input with this command
     ```bash
-    curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
+    curl -X POST \
+      -H "Content-Type:application/json; format=pandas-split" \
+      --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' \
+      http://127.0.0.1:1234/invocations
     ```
