@@ -15,6 +15,10 @@ Services will listening on `103xx` ports
 | database(MySQL)     | 10336       |
 | Minio(S3/OSS)       | 10390,10391 |
 
+### Others
+
+- This repository is using PyPI mirror in Dockerfile. The region of mirror is the mainland of China.
+
 ## How to run
 
 1. Clone (download) this repository
@@ -96,3 +100,7 @@ The MLflow tracking server is composed of 4 docker containers:
       --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' \
       http://127.0.0.1:1234/invocations
     ```
+
+## Credits
+
+This project is updated base on [mlflow-docker-compose@sachua](https://github.com/sachua/mlflow-docker-compose)
