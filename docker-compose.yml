@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.7'
 
 services:
     minio:
@@ -14,7 +14,6 @@ services:
             - MINIO_ROOT_PASSWORD=${AWS_SECRET_ACCESS_KEY}
         volumes:
             - minio_data:/data
-
     mc:
         image: minio/mc:RELEASE.2022-11-07T23-47-39Z
         depends_on:

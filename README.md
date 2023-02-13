@@ -104,3 +104,31 @@ The MLflow tracking server is composed of 4 docker containers:
 ## Credits
 
 This project is updated base on [mlflow-docker-compose@sachua](https://github.com/sachua/mlflow-docker-compose)
+
+## FQA
+
+**MySQL client(GUI) fail to connect to MySQL Server(docker-compose service)**
+
+```shell
+### enter into shell of mysql server
+$ docker-compose exec db bash
+### use mysql client
+bash-4.4# mysql -u root -p
+Enter password: mysql
+...
+### fix problem:
+mysql> CREATE USER 'mlflow_user'@'127.0.0.1' IDENTIFIED BY 'mlflow';
+Query OK, 0 rows affected (0.30 sec)
+
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'mlflow_user'@'127.0.0.1' WITH GRANT OPTION;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> flush privileges;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> \q
+Bye
+bash-4.4# exit
+exit
+$ 
+```
