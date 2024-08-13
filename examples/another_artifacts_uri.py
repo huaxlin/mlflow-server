@@ -1,15 +1,26 @@
 import os
 import mlflow
 
-# os.environ['MLFLOW_TRACKING_URI'] = 'mysql+pymysql://mlflow_user:mlflow@127.0.0.1:10336/mlflow_database'
 os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://127.0.0.1:10390"
 os.environ['AWS_ACCESS_KEY_ID'] = 'minio'
 os.environ['AWS_SECRET_ACCESS_KEY'] = 'minio123'
 
+
 os.environ['MLFLOW_TRACKING_URI'] = 'http://127.0.0.1:10380'
-experiment_name = "experiment_insurance"
+
+# os.environ['MLFLOW_TRACKING_USERNAME'] = 'foo'
+# os.environ['MLFLOW_TRACKING_PASSWORD'] = 'admin'
+# experiment_name, artifact_location = "experiment_demo_auth_foo", "s3://mlflow/artifacts"
+
+os.environ['MLFLOW_TRACKING_USERNAME'] = 'bar'
+os.environ['MLFLOW_TRACKING_PASSWORD'] = 'admin'
+experiment_name, artifact_location = "experiment_demo_auth_bar", "s3://mlflow/artifacts"
+
+# experiment_name, artifact_location = "experiment_demo", "s3://mlflow/artifacts"
+# experiment_name, artifact_location = "experiment_insurance", "s3://insurance/mlflow/artifacts"
+# experiment_name, artifact_location = "experiment_credits", "s3://credits/mlflow/artifacts"
 try:
-    mlflow.create_experiment(experiment_name, artifact_location="s3://insurance/mlflow/artifacts")
+    mlflow.create_experiment(experiment_name, artifact_location=artifact_location)
 except mlflow.MlflowException as e:
     print('-' * 10, 'SKIP EXIST', '-' * 10, '\n', e, '\n', '-' * 30)
 mlflow.set_experiment(experiment_name)

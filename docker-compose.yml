@@ -100,11 +100,20 @@ services:
             - "10380:5000"
         env_file:
             - .env
+        volumes:
+            - $PWD/mlflow_server:/code
+            - ./wait-for-it.sh:/tmp/wait-for-it.sh
+            - ./mlflow_server/auth/8606fa83a998_initial_migration.py:/usr/local/lib/python3.10/site-packages/mlflow/server/auth/db/migrations/versions/8606fa83a998_initial_migration.py
         environment:
             - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-            - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-            - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-        command: mlflow server --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --default-artifact-root s3://mlflow/ --host 0.0.0.0
+            - MLFLOW_AUTH_CONFIG_PATH=/code/auth/auth_config.ini
+        # command: /bin/bash -c "while true; do sleep 1; done"
+        command: >
+          /bin/sh -c "
+          /tmp/wait-for-it.sh minio:9000 &&
+          /tmp/wait-for-it.sh db:3306 -t 0 &&
+          mlflow server --app-name basic-auth --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --default-artifact-root s3://mlflow/ --host 0.0.0.0 -p 5000
+          "
         restart: always
 
 volumes:
